@@ -36,9 +36,9 @@ func main() {
   }
 
   run  := "pmgo start " + setpath + " " + procname + " > /dev/null"
-  kill := "pmgo stop " + procname + " > /dev/null && pmgo delete > /dev/null" + procname
+  kill := "pmgo stop " + procname + " > /dev/null && pmgo delete " + procname + " > /dev/null"
 
-  cmd := exec.Command("sh", "-c", run)
+  cmd := exec.Command("sh", "-c", kill + " && sleep 2 && " + run)
   stdout, _ := cmd.CombinedOutput()
   fmt.Println(string(stdout))
 
@@ -53,7 +53,7 @@ func main() {
       // watch for events
       case event := <-watcher.Events:
         if strings.Contains(event.Name, ".go") && event.Op == 2{
-          fmt.Printf("UPDATED: %s", event.Name)
+          fmt.Printf("UPDATED: %s\n", event.Name)
           cmd := exec.Command("sh", "-c", kill + " && sleep 2 && " + run)
           stdout, _ := cmd.CombinedOutput()
           fmt.Println(string(stdout))
