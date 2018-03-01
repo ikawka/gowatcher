@@ -36,7 +36,7 @@ func main() {
   }
 
   run  := "pmgo start " + setpath + " " + procname + " > /dev/null"
-  kill := "pmgo stop " + procname + " && pmgo delete " + procname
+  kill := "pmgo stop " + procname + " > /dev/null && pmgo delete > /dev/null" + procname
 
   cmd := exec.Command("sh", "-c", run)
   stdout, _ := cmd.CombinedOutput()
@@ -52,8 +52,8 @@ func main() {
       select {
       // watch for events
       case event := <-watcher.Events:
-        if strings.Contains(event.Name, ".go") {
-          fmt.Printf("UPDATED: %s, %i", event.Name, event.Op)
+        if strings.Contains(event.Name, ".go") && event.Op == 2{
+          fmt.Printf("UPDATED: %s, %d", event.Name)
           cmd := exec.Command("sh", "-c", kill + " && sleep 2 && " + run)
           stdout, _ := cmd.CombinedOutput()
           fmt.Println(string(stdout))
