@@ -54,6 +54,10 @@ func main() {
       case event := <-watcher.Events:
         if strings.Contains(event.Name, ".go") && event.Op == 2{
           fmt.Printf("UPDATED: %s\n", event.Name)
+          cmd2 := exec.Command("sh", "-c", "go test")
+          stdout2, _ := cmd2.CombinedOutput()
+          fmt.Println(string(stdout2))
+
           cmd := exec.Command("sh", "-c", kill + " && sleep 2 && " + run)
           stdout, _ := cmd.CombinedOutput()
           fmt.Println(string(stdout))
