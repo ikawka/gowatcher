@@ -12,7 +12,7 @@ import (
   "path/filepath"
   "log"
 
-  "github.com/go-fsnotify/fsnotify"
+  "github.com/fsnotify/fsnotify"
 )
 
 //
